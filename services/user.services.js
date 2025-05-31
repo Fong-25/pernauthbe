@@ -36,3 +36,16 @@ export const getUserByUsername = async (username) => {
     )
     return result.rows[0] || null
 }
+
+export const updateUser = async (userId, values) => {
+    const keys = Object.keys(values)
+    const setClause = keys.map((key, i) => `${key} = $${i + 1}`).join(', ')
+    const query = `UPDATE users SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`;
+
+    const result = await pool.query(query, [...Object.values(values), userId]);
+    return result.rows[0];
+}
+
+export const generateVerifcationToken = (userId) => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}

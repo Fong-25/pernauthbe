@@ -3,7 +3,9 @@ import {
     getUserByEmail,
     getUserById,
     getUserByUsername,
-    validateEmail
+    validateEmail,
+    generateVerifcationToken,
+    updateUser
 } from '../services/user.services.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
@@ -37,7 +39,17 @@ export const signup = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)
-        const newUser = await createUser({ username, email, password: hashedPassword })
+        const verificationToken = generateVerifcationToken()
+        const resetToken = null
+        const resetTokenExpiry = null
+        const newUser = await createUser({
+            username,
+            email,
+            password: hashedPassword,
+            verificationToken,
+            resetToken,
+            resetTokenExpiry
+        })
         return res.status(201).json({
             message: 'User registered successfully.',
             user: {
