@@ -46,6 +46,6 @@ export const updateUser = async (userId, values) => {
     return result.rows[0];
 }
 
-export const generateVerifcationToken = (userId) => {
+export const generateVerifcationToken = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
